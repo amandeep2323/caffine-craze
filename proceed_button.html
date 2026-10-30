@@ -487,17 +487,17 @@
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-analytics.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
-        apiKey: "",
-        authDomain: "",
-        projectId: "",
-        storageBucket: "",
-        messagingSenderId: "",
-        appId: "",
-        measurementId: ""
+        apiKey: "AIzaSyAQbW8GZYx8s1TClUiG7r711piLJFtrANA",
+        authDomain: "caffinecraze-93d3f.firebaseapp.com",
+        projectId: "caffinecraze-93d3f",
+        storageBucket: "caffinecraze-93d3f.firebasestorage.app",
+        messagingSenderId: "774090459612",
+        appId: "1:774090459612:web:28aa1e5d3a3de8d393e719",
+        measurementId: "G-Z5VTH06PF5"
     };
 
     // Initialize Firebase
@@ -513,23 +513,53 @@
 
     // Check authentication state
     onAuthStateChanged(auth, (user) => {
+        const loginNavItem = document.querySelector('.navbar-nav .nav-item:last-child');
+        
         if (user) {
-            // User is signed in, update UI accordingly
-            const loginLink = document.querySelector('.navbar-nav .nav-item:last-child .nav-link');
-            if (loginLink) {
-                loginLink.textContent = ' My Profile';
-                loginLink.href = 'profile.html';
-            }
+            // User is signed in - show dropdown menu
+            const displayName = user.displayName || user.email.split('@')[0];
+            
+            loginNavItem.innerHTML = `
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="usericon.png" alt="User Icon" class="navbar-icon"> ${displayName}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="profile.html">My Profile</a></li>
+                        <li><a class="dropdown-item" href="proceed_button.html">My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
+                    </ul>
+                </div>
+            `;
+            
+            // Logout handler
+            document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    await signOut(auth);
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            });
             
             // Update cart count
             CartManager.updateCartCount();
+        } else {
+            // Show login link
+            loginNavItem.innerHTML = `
+                <a class="nav-link" href="spa.html">
+                    <img src="usericon.png" alt="User Icon" class="navbar-icon"> Login
+                </a>
+            `;
         }
     });
 </script>
 <script type="module">
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import FirestoreService from "./firestore.js";
 
     // Firebase configuration

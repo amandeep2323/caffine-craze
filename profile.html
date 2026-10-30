@@ -260,7 +260,13 @@
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
-
+      apiKey: "AIzaSyAQbW8GZYx8s1TClUiG7r711piLJFtrANA",
+      authDomain: "caffinecraze-93d3f.firebaseapp.com",
+      projectId: "caffinecraze-93d3f",
+      storageBucket: "caffinecraze-93d3f.firebasestorage.app",
+      messagingSenderId: "774090459612",
+      appId: "1:774090459612:web:28aa1e5d3a3de8d393e719",
+      measurementId: "G-Z5VTH06PF5"
     };
 
     // Initialize Firebase
@@ -270,13 +276,43 @@
 
     // Check authentication state
     onAuthStateChanged(auth, async (user) => {
+        // Update navbar
+        const loginNavItem = document.querySelector('.navbar-nav .nav-item:last-child');
+        
         if (user) {
-            // User is signed in
+            // User is signed in - update navbar
+            const displayName = user.displayName || user.email.split('@')[0];
+            
+            loginNavItem.innerHTML = `
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="usericon.png" alt="User Icon" class="navbar-icon"> ${displayName}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="profile.html">My Profile</a></li>
+                        <li><a class="dropdown-item" href="proceed_button.html">My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
+                    </ul>
+                </div>
+            `;
+            
+            // Logout handler
+            document.getElementById('logoutBtn')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    await signOut(auth);
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            });
+            
+            // Show profile content
             document.getElementById('profile-content').style.display = "block";
             document.getElementById('not-logged-in').style.display = "none";
             
             // Display user info
-            const displayName = user.displayName || 'User';
             const email = user.email;
             const creationTime = new Date(user.metadata.creationTime).toLocaleDateString();
             
@@ -296,7 +332,13 @@
             await loadOrderHistory();
             
         } else {
-            // User is not signed in
+            // User is not signed in - show login link
+            loginNavItem.innerHTML = `
+                <a class="nav-link" href="spa.html">
+                    <img src="usericon.png" alt="User Icon" class="navbar-icon"> Login
+                </a>
+            `;
+            
             document.getElementById('profile-content').style.display = "none";
             document.getElementById('not-logged-in').style.display = "block";
         }
