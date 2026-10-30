@@ -6,13 +6,13 @@ import { getFirestore, collection, getDocs, doc, updateDoc, setDoc } from "fireb
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
-  measurementId: "",
+  apiKey: "AIzaSyAQbW8GZYx8s1TClUiG7r711piLJFtrANA",
+  authDomain: "caffinecraze-93d3f.firebaseapp.com",
+  projectId: "caffinecraze-93d3f",
+  storageBucket: "caffinecraze-93d3f.firebasestorage.app",
+  messagingSenderId: "774090459612",
+  appId: "1:774090459612:web:28aa1e5d3a3de8d393e719",
+  measurementId: "G-Z5VTH06PF5",
 }
 
 // Initialize Firebase
